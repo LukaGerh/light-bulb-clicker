@@ -1,0 +1,15 @@
+
+
+#switchOff:active{
+    display: flex;
+}
+
+#lightOff:active{
+    display: none;
+}
+
+#lightOn{
+    display: none;
+}
+
+#lightOff{}
