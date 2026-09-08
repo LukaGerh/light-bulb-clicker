@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html>
     <head>
-        
+        <link rel="stylesheet" href="../styles/main-style.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
         <header>
             <h1>Light bulb clicker</h1>
         </header>
          <main>
-            <img id="switchOff" src="../media/light-switch2.png">
-            <img id="switchOn" src="../media/light-switch.png">
-            <img id="lightOff" src="../media/lightoff.png">
-            <img id="lightOn" src="../media/lighton.png">
+            <div class="elements-layout">
+                <img class="photo-elements active" id="switchOff" src="../media/switch_off.png">
+                <img class="photo-elements" id="switchOn" src="../media/switch_on.png">
+                <img class="photo-elements active" id="lightOff" src="../media/light_off.png">
+                <img class="photo-elements" id="lightOn" src="../media/light_on.png">
+                
+            </div>
+            <p id="click-count">0</p>
+            <div class="rectangle">
+                <h2>Shop</h2>
+            </div>
+            
          </main>  
         <script src="../scripts/script.js"></script>   
     </body>

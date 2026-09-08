@@ -1,15 +1,85 @@
 
+html, body{
+    background-color: black;
+    height: 100%;
+}
+h1{
+    text-align: center;
+    color: white;
 
-#switchOff:active{
+}
+
+.whole-layout{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.elements-layout{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+#switchOff{
+    display: none;
+}
+
+#switchOff.active{
     display: flex;
 }
 
-#lightOff:active{
+#switchOn{
     display: none;
+}
+
+#switchOn.active{
+    display: flex;
+}
+
+#lightOff{
+    display: none;
+}
+
+#lightOff.active{
+    display: flex;
 }
 
 #lightOn{
     display: none;
 }
 
-#lightOff{}
+#lightOn.active{
+    display: flex;
+}
+
+
+.rectangle{
+
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 20vw;    
+    max-width: 20vw; 
+    background-color: orange;
+}
+
+.rectangle h2{
+    text-align: center;
+}
+
+#click-count{
+    display: block;
+    font-size: 3rem;
+    text-align: center;
+    color: gray;
+}
+#click-count.active{
+    display: block;
+    font-size: 3rem;
+    text-align: center;
+    color: white;
+    margin-right: 20px;
+}
