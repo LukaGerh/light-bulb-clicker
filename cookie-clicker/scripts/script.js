@@ -6,6 +6,7 @@ const lightOn= document.getElementById("lightOn")
 const lightOff = document.getElementById("lightOff")
 const count_label = document.getElementById('click-count')
 const timerLabel = document.querySelector('#timer')
+const container = document.querySelector('.rectangle');
 
 let photoElements = document.querySelectorAll("photo-elements");
 let bttnWorth2 = document.getElementById('worth2')
@@ -16,9 +17,12 @@ switchOn.addEventListener("click", onBulbClick);
 
 /*bttnWorth2.addEventListener('click', checkCount500)*/
 
-let count = 2450;
+let count = 2490;
 let step = 1;
-let randInt;
+let randInt = Math.floor(Math.random() * 1001) + 2500;
+console.log("Mērķis:", randInt)
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 
 function onBulbClick(){
     switchOn.classList.toggle('active');
@@ -32,18 +36,18 @@ function onBulbClick(){
     checkUpgrades()
 }
 
-function checkUpgrades(){
+async function checkUpgrades(){
     if (count == 500){
         return upgrade500()
     }
-    else if(count == 2500){
-        return challangeAtRandTime()
+    else if(count == randInt){
+        return await startChallenge()
     }
 
 }
 
 function upgrade500(){
-    const container = document.querySelector('.rectangle');
+    
     const newBttn = document.createElement("button");
     container.appendChild(newBttn);
     newBttn.textContent = "Collect 2 per 1 click";
@@ -51,14 +55,31 @@ function upgrade500(){
 }
 
 
-function challangeAtRandTime(){
-    const randInt =  Math.floor(Math.random() * 1001) + 2500;
-    
+
+async function startChallenge(){
+    let timerCount = 0;
+    let startCount = count;
+
+
+
+    for(let i = 0; i < 61; i++){
+        timerLabel.innerHTML = timerCount;
+        timerCount++;
+        await sleep(1000);
+    }
+    if(count-startCount >= 50){
+        const newBttn = document.createElement('button');
+        container.appendChild(newBttn);
+        newBttn.textContent = "Collect smart switch";
+        
+
+    };
 }
 
 
-
-/*if(count !== randInt){
+/*
+if(count !== randInt){
         console.log('Sākās challange!')
         setInterval(() => {for(i = 0; i<61; i++){timerLabel.innerHTML='i'}}, 1000);
     }
+*/
