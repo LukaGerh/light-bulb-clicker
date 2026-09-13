@@ -17,11 +17,7 @@ h1{
 p{
     color: white;
 }
-.whole-layout{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+
 
 .elements-layout{
     display: flex;
@@ -30,51 +26,47 @@ p{
     gap: 20px;
 }
 
-#switchOff{
+.elements-layout img {
     display: none;
 }
 
-#switchOff.active{
-    display: flex;
+.elements-layout img.active {
+    display: inline-block;
 }
 
-#switchOn{
+.hiddenElement{
     display: none;
 }
 
-#switchOn.active{
-    display: flex;
-}
-
-#lightOff{
-    display: none;
-}
-
-#lightOff.active{
-    display: flex;
-}
-
-#lightOn{
-    display: none;
-}
-
-#lightOn.active{
-    display: flex;
+p.hiddenElement.active{
+    display: inline;
 }
 
 
 .rectangle{
-
     position: fixed;
     top: 0;
     bottom: 0;
     right: 0;
     width: 20vw;    
-    max-width: 20vw; 
     background-color: orange;
+    font-size: 24px;
+
+
 }
 
+.rectangle button{
+    display: block; 
+    margin: 0 auto;
+    background: blue;
+    color: white;
+    padding: 10px 5px;
+    font-size: 0.8em;
+    
+} 
+
 .rectangle h2{
+    display: block;
     text-align: center;
 }
 
@@ -92,8 +84,13 @@ p{
     margin-right: 20px;
 }
 
+.inline-container{
+    display: inline;
+    color: red;
+}
 
-#timer{
+
+.timer-style{
     color: white;
     text-align: center;
     font-size: 3rem;
