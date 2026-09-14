@@ -31,6 +31,9 @@ let lightExploded;
 let count = 2490;
 let step = 1;
 let stepBttnPrice = 1000;
+let autoClickPrice = 1000;
+let autoClickStep = 0;
+let autoClickState = true;
 let randInt = Math.floor(Math.random() * 1001) + 2500;
 let randIntTriggered = false; // Nomainīt atpakal uz false
 console.log("Mērķis:", randInt);
@@ -42,6 +45,7 @@ let explodeTriggered = true;
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 buyStepBttn.addEventListener('click',()=>{shopBttns(buyStepBttn)});
+buyAutoClick.addEventListener('click', ()=>{shopBttns(buyAutoClick)});
 /*
 switchOff.addEventListener("click", ()=>{onBulbClick(switchOff)});
 switchOn.addEventListener("click", ()=>onBulbClick(switchOn));
@@ -109,10 +113,23 @@ function shopBttns(bttn){
             }
             break;
         case buyAutoClick: 
+            if(count>=autoClickPrice){
+                count.innerHTML = count-autoClickPrice;
+                count=count-autoClickPrice;
+                autoClickFunction();
+            }
             break; 
     }
 }
 
+function autoClickFunction(){
+
+    while(autoClickState == true){
+        count.innerHTML = count + autoClickStep;
+        count = count + autoClickStep; 
+    }
+    
+}
 
 function onBulbClick(switchPressed){
     if(switchPressed == switchOff){
