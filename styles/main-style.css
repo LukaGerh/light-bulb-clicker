@@ -1,5 +1,5 @@
 
-
+@import url('https://fonts.googleapis.com/css2?family=Kreon:wght@300..700&display=swap');
 
 
 html, body{
@@ -7,10 +7,13 @@ html, body{
     height: 100%;
     user-select: none;
     -webkit-user-drag: none;
+    font-family: Kreon;
+    font-size: 30px;
 }
 h1{
     text-align: center;
     color: white;
+    margin-top: 2vh;
 
 }
 
@@ -18,20 +21,14 @@ p{
     color: white;
 }
 
-
-.elements-layout{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
+.timer-elements{
+    text-align: center;
 }
 
-.elements-layout img {
-    display: none;
-}
-
-.elements-layout img.active {
-    display: inline-block;
+#announcement{
+    color: red;
+    font-size: 1rem;
+    text-align: center;
 }
 
 .hiddenElement{
@@ -40,35 +37,28 @@ p{
 
 p.hiddenElement.active{
     display: inline;
+    color: red;
 }
 
-
-.rectangle{
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    width: 20vw;    
-    background-color: orange;
-    font-size: 24px;
-
-
-}
-
-.rectangle button{
-    display: block; 
-    margin: 0 auto;
-    background: blue;
+#timer{
     color: white;
-    padding: 10px 5px;
-    font-size: 0.8em;
-    margin-bottom: 10px;
-    
-} 
-
-.rectangle h2{
-    display: block;
     text-align: center;
+    font-size: 2rem;
+}
+
+#main-screen{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+#main-screen img {
+    display: none;
+}
+
+#main-screen img.active {
+    display: inline-block;
 }
 
 #click-count{
@@ -85,14 +75,42 @@ p.hiddenElement.active{
     margin-right: 20px;
 }
 
+
+.rectangle{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 20vw;    
+    background-color: orange;
+    font-size: 24px;
+}
+
+.rectangle button{
+    display: block; 
+    background: blue;
+    color: white;
+    padding: 10px 5px;
+    font-size: 0.8em;
+    margin: 0 auto 10px auto;
+    
+} 
+
+.rectangle h2{
+    display: block;
+    text-align: center;
+}
+
+
+
 .inline-container{
     display: inline;
     color: red;
 }
 
-
-.timer-style{
-    color: white;
-    text-align: center;
-    font-size: 3rem;
+.digitalContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
+

@@ -12,25 +12,27 @@
             <h1>Light bulb clicker</h1>
         </header>
          <main>
-
-            <p class="announcement"></p>
-
-            <div id="main-screen" class="elements-layout">
+            <div class="timer-elements">
+                <p id="announcement"></p>
+                <p class="hiddenElement">Time left: <span id="timer"></span></p>
+            </div>
+            <div id="main-screen">
                 <img class="active" id="switchOff" src="../media/switch_off.png">
                 <img id="switchOn" src="../media/switch_on.png">
                 <img class="active" id="lightOff" src="../media/light_off.png">
                 <img id="lightOn" src="../media/light_on.png">
             </div>
+            <p id="challengeCount"></p>
             <p id="click-count">0</p>
-
-            
-           
-            <p class="hiddenElement">Time left: <span id="timer"></span></p>
 
             <div class="rectangle">
                 <h2>Shop</h2>
-                <button id="buyStepBttn">Double step for 1000 points</button>
-                <button id="buyAutoClickBttn">buy autoclick with step 1 for 1000</button>
+                <button id="buyStepBttn">Double step for 500 points</button>
+                <button id="buyAutoClickBttn">Add autoclick with step 1 for 800</button>
+                <button id="gambleBttn">Gamble with 100 clicks</button>
+                <div id="bonus-container">
+                    <h2>Free bonuses</h2>
+                </div>
             </div>
             
          </main>  
