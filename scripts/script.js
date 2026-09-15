@@ -34,8 +34,9 @@ const announcement = document.getElementById('announcement');
 const main = document.getElementById("main-screen");
 const digitalContainer = document.createElement('div');
 const count_label = document.getElementById('click-count');
+const countText = document.getElementById('countText');
 const challengeCount = document.getElementById('challengeCount');
-const timerText = document.querySelector('p.hiddenElement');
+const timerText = document.getElementById('timer-text');
 const timerNum = document.querySelector('#timer');
 
 // LAMP
@@ -52,6 +53,11 @@ let is500Collected = false;
 let isChallengeCompleted = false;
 let isGreenBulbTaken = false;
 let isBlueBulbTaken = false;
+let isPinkBulbTaken = false;
+let isPurpleBulbTaken = false;
+let isRedBulbTaken = false;
+
+let isChallengeActive = false;
 
 //SAVING LABELS
 let buyStepBttn_Label;
@@ -65,11 +71,18 @@ let imgOnScreen = lightOn;
 let lightExploded;
 
 
-let count = 390;
+let count = 9999;
 
 // STEPS
-let step = 100;
+let step = 1;
 let autoClickStep = 0;
+//======
+setInterval(function () {
+    if (autoClickStep > 0 && !isChallengeActive) {
+        count = count + autoClickStep;
+        count_label.innerHTML = count;
+    }
+}, 1000);
 
 // SHOP PRICES
 let stepBttnPrice = 500;
@@ -77,12 +90,12 @@ let autoClickPrice = 800;
 let gambleAmount = 100;
 
 
-let randInt = Math.floor(Math.random() * 1001) + 2500;
+let randInt = Math.floor(Math.random() * 1001) + 10000;
 let randIntTriggered = false; 
 console.log("Mērķis:", randInt);
 
 
-let explodeTime = 10000;
+let explodeTime = 15000;
 
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -97,17 +110,15 @@ switchOff.addEventListener("click", ()=>{onBulbClick(switchOff)});
 switchOn.addEventListener("click", ()=>onBulbClick(switchOn));
 
 
-setInterval(function () {
-    if (autoClickStep > 0) {
-        count = count + autoClickStep;
-        count_label.innerHTML = count;
-    }
-}, 1000);
+
 
 function shopBttns(bttn){
     
     switch(bttn){
         case buyStepBttn:
+            if (isChallengeActive) {
+            break;
+            }
             if(count>=stepBttnPrice){
                 if(is500Collected == false){
                 newBttn500.remove();
@@ -122,7 +133,10 @@ function shopBttns(bttn){
 
             }
             break;
-        case buyAutoClick: 
+        case buyAutoClick:
+            if (isChallengeActive) {
+                break;
+            } 
             if(count>=autoClickPrice){
                 count=count-autoClickPrice;
                 count_label.innerHTML = count;
@@ -138,6 +152,9 @@ function shopBttns(bttn){
             }
             break;
         case gambleBttn:
+            if (isChallengeActive) {
+                break;
+            }
             if (count >= gambleAmount) {
                 let isWin = Math.random() < 0.5;
 
@@ -175,30 +192,23 @@ function onBulbClick(switchPressed){
         turnOffSound.currentTime = 0; // Pārtrauc iepriekšējo un sāk no jauna
         turnOffSound.play().catch(e => console.log(e));
     }
-    if(imgOnScreen == lightOn){
-        switchOn.classList.toggle('active');
-        switchOff.classList.toggle('active');
-        lightOff.classList.toggle('active');
-        lightOn.classList.toggle('active');
+    switchOn.classList.toggle('active');
+    switchOff.classList.toggle('active');
+    lightOff.classList.toggle('active');
+
+  
+    if(imgOnScreen) {
+        imgOnScreen.classList.toggle('active');
+    }
+
+    
+    if (!isChallengeActive) {
         count_label.classList.toggle('active');
+        count = count + step;
+        count_label.innerHTML = count;
+        checkLightBulbChange();
+        checkUpgrades();
     }
-    else if(imgOnScreen == lightBulbGreen){
-        //lightOn.remove();
-        switchOn.classList.toggle('active');
-        switchOff.classList.toggle('active');
-        lightOff.classList.toggle('active');
-        lightBulbGreen.classList.toggle('active'); 
-    }
-    else if(imgOnScreen == lightBulbBlue){
-        switchOn.classList.toggle('active');
-        switchOff.classList.toggle('active');
-        lightOff.classList.toggle('active');
-        lightBulbBlue.classList.toggle('active'); 
-    } 
-    count = count + step;
-    count_label.innerHTML = count;
-    checkLightBulbChange();
-    checkUpgrades();
    
 }
 
@@ -223,25 +233,76 @@ function onDigitalScroll(digSwitchPressed){
 }
 
 function checkLightBulbChange(){
-    if(count>=500 && !isGreenBulbTaken){
+    if(count >= 500 && !isGreenBulbTaken){
         isGreenBulbTaken = true;
+        // Pārbaudām, vai vecā spuldze pašlaik bija ieslēgta
+        let wasActive = lightOn.classList.contains('active');
         lightOn.remove();
+
         lightBulbGreen = document.createElement('img');
         lightBulbGreen.src = "../media/lightBulbGreen.png";
         lightBulbGreen.alt = "light bulb is green";
+        
+        // Ja vecā bija ieslēgta, arī jaunajai uzreiz iedodam .active
+        if(wasActive) lightBulbGreen.classList.add('active');
+
         main.appendChild(lightBulbGreen);
         imgOnScreen = lightBulbGreen;
     }
-    else if(count>=1400&& !isBlueBulbTaken){
+    else if(count >= 1400 && !isBlueBulbTaken){
         isBlueBulbTaken = true;
+        let wasActive = lightBulbGreen.classList.contains('active');
         lightBulbGreen.remove();
+
         lightBulbBlue = document.createElement('img');
         lightBulbBlue.src = "../media/lightBulbBlue.png";
         lightBulbBlue.alt = "light bulb is blue";
+        if(wasActive) lightBulbBlue.classList.add('active');
+
         main.appendChild(lightBulbBlue);
         imgOnScreen = lightBulbBlue;
     }
+    else if(count >= 2600 && !isPinkBulbTaken){
+        isPinkBulbTaken = true;
+        let wasActive = lightBulbBlue.classList.contains('active');
+        lightBulbBlue.remove();
+
+        lightBulbPink = document.createElement('img');
+        lightBulbPink.src = "../media/lightBulbPink.png";
+        lightBulbPink.alt = "light bulb is pink";
+        if(wasActive) lightBulbPink.classList.add('active');
+
+        main.appendChild(lightBulbPink);
+        imgOnScreen = lightBulbPink;
+    }
+    else if(count >= 4700 && !isPurpleBulbTaken){
+        isPurpleBulbTaken = true;
+        let wasActive = lightBulbPink.classList.contains('active');
+        lightBulbPink.remove();
+
+        lightBulbPurple = document.createElement('img');
+        lightBulbPurple.src = "../media/lightBulbPurple.png";
+        lightBulbPurple.alt = "light bulb is purple";
+        if(wasActive) lightBulbPurple.classList.add('active');
+
+        main.appendChild(lightBulbPurple);
+        imgOnScreen = lightBulbPurple;
+    }
+    else if(count >= 9000 && !isRedBulbTaken){
+        isRedBulbTaken = true;
+        let wasActive = lightBulbPurple.classList.contains('active');
+        lightBulbPurple.remove();
+
+        lightBulbRed = document.createElement('img');
+        lightBulbRed.src = "../media/lightBulbRed.png";
+        lightBulbRed.alt = "light bulb is red";
+        if(wasActive) lightBulbRed.classList.add('active');
+
+        main.appendChild(lightBulbRed);
+        imgOnScreen = lightBulbRed;
+    }
 }
+
 
 async function checkUpgrades(){
     if (count == 500 && !is500Collected){
@@ -270,12 +331,17 @@ function upgrade500(){
 
 
 async function startChallenge(){
+
+    isChallengeActive = true;
+
     let timerCount = 60;
-    //let startCount = count;
+    
     let newBttn;
     announcement.innerHTML = 'Get atleast 400 clicks for instant bonus!<br> (clicks are counted by 1)';
+    
     timerText.classList.toggle('active');
-
+    countText.classList.toggle('active');
+    
     let clicksCounted = 0;
     
     timerStart.play();
@@ -296,32 +362,47 @@ async function startChallenge(){
         timerCount--;
         await sleep(1000);
     }
-    switchOff.removeEventListener();
-    switchOn.removeEventListener();
-    announcement.innerHTML ='';
+    switchOff.removeEventListener('click', countClicks);
+    switchOn.removeEventListener('click', countClicks);
+
+    switchOff.remove();
+    switchOn.remove();
+    lightOff.remove();
+    imgOnScreen.remove();
+
+    isChallengeActive = false;
+    //timerText.classList.remove('active');
+    countText.classList.remove('active');
     challengeCount.remove();
+
+    announcement.innerHTML ='';
     newBttn = document.createElement('button');
     newBttn.textContent = "Collect smart switch";
 
     if(clicksCounted >= 400){
+        announcement.innerHTML = 'Collect your reward!';
         timerText.classList.toggle('active');
         console.log('Klikšķi 60 sekundēs', clicksCounted);
         container.appendChild(newBttn);
         
     }   
     else{
+        announcement.innerHTML = 'You have 1 minute penalty <br> (Collect reward afterwards)'
         timerText.classList.toggle('active');
         console.log('Klikšķi 60 sekundēs', clicksCounted);
         await sleep(60000);
         container.appendChild(newBttn);
     }
     newBttn.addEventListener('click', function(){
+        announcement.innerHTML = '';
+        
         newBttn.remove();
+        /*
         switchOff.remove();
         lightOff.remove();
         switchOn.remove();
-        lightOn.remove();
-
+        imgOnScreen.remove();
+        */
         digitalContainer.classList.add('digitalContainer')
         main.appendChild(digitalContainer);
 
