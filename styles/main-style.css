@@ -2,11 +2,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Kreon:wght@300..700&display=swap');
 
 
+*{
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
 html, body{
     background-color: black;
     height: 100%;
-    user-select: none;
-    -webkit-user-drag: none;
     font-family: Kreon;
     font-size: 30px;
 }

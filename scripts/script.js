@@ -4,6 +4,12 @@ const switchOn = document.getElementById("switchOn");
 const lightOn= document.getElementById("lightOn");
 const lightOff = document.getElementById("lightOff");
 // ========
+// Other images
+let lightBulbBlue;
+let lightBulbGreen;
+let lightBulbPink;
+let lightBulbPurple;
+let lightBulbRed;
 
 //SHOP
 const container = document.querySelector('.rectangle');
@@ -42,22 +48,32 @@ let digitalLightOn;
 let newBttn500;
 
 //STATE CHECKERS
-is500Collected = false;
+let is500Collected = false;
+let isChallengeCompleted = false;
+let isGreenBulbTaken = false;
+let isBlueBulbTaken = false;
+
+//SAVING LABELS
+let buyStepBttn_Label;
+let buyAutoClick_Label;
+let gambleBttn_Label;
+
+//saving chosen img
+let imgOnScreen = lightOn;
 
 
 let lightExploded;
 
 
-let count = 490;
+let count = 390;
 
 // STEPS
-let step = 1;
+let step = 100;
 let autoClickStep = 0;
 
 // SHOP PRICES
 let stepBttnPrice = 500;
 let autoClickPrice = 800;
-let multiplierPrice = 15000;
 let gambleAmount = 100;
 
 
@@ -67,7 +83,7 @@ console.log("Mērķis:", randInt);
 
 
 let explodeTime = 10000;
-let explodeTriggered = true; 
+
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -102,6 +118,8 @@ function shopBttns(bttn){
                 step=step * 2;
                 count_label.innerHTML = count;
                 buyStepBttn.innerHTML = `Add ${step} steps for ${stepBttnPrice}`;
+                buyStepBttn_Label = `Add ${step} steps for ${stepBttnPrice}`;
+
             }
             break;
         case buyAutoClick: 
@@ -116,6 +134,7 @@ function shopBttns(bttn){
                     autoClickStep = autoClickStep * 2;
                 }
                 buyAutoClick.innerHTML = `Add additional ${autoClickStep} autoclicks for ${autoClickPrice}`;
+                buyAutoClick_Label = `Add additional ${autoClickStep} autoclicks for ${autoClickPrice}`;
             }
             break;
         case gambleBttn:
@@ -133,6 +152,7 @@ function shopBttns(bttn){
                
                 gambleAmount = Math.round(gambleAmount * 1.5); 
                 gambleBttn.innerHTML = `Risk with ${gambleAmount} clicks`;
+                gambleBttn_Label = `Risk with ${gambleAmount} clicks`;
 
                 count_label.innerHTML = count;
                 checkUpgrades();
@@ -155,15 +175,31 @@ function onBulbClick(switchPressed){
         turnOffSound.currentTime = 0; // Pārtrauc iepriekšējo un sāk no jauna
         turnOffSound.play().catch(e => console.log(e));
     }
-    switchOn.classList.toggle('active');
-    switchOff.classList.toggle('active');
-    lightOff.classList.toggle('active');
-    lightOn.classList.toggle('active');
-    count_label.classList.toggle('active');
-
+    if(imgOnScreen == lightOn){
+        switchOn.classList.toggle('active');
+        switchOff.classList.toggle('active');
+        lightOff.classList.toggle('active');
+        lightOn.classList.toggle('active');
+        count_label.classList.toggle('active');
+    }
+    else if(imgOnScreen == lightBulbGreen){
+        //lightOn.remove();
+        switchOn.classList.toggle('active');
+        switchOff.classList.toggle('active');
+        lightOff.classList.toggle('active');
+        lightBulbGreen.classList.toggle('active'); 
+    }
+    else if(imgOnScreen == lightBulbBlue){
+        switchOn.classList.toggle('active');
+        switchOff.classList.toggle('active');
+        lightOff.classList.toggle('active');
+        lightBulbBlue.classList.toggle('active'); 
+    } 
     count = count + step;
     count_label.innerHTML = count;
+    checkLightBulbChange();
     checkUpgrades();
+   
 }
 
 
@@ -186,6 +222,26 @@ function onDigitalScroll(digSwitchPressed){
     checkUpgrades();
 }
 
+function checkLightBulbChange(){
+    if(count>=500 && !isGreenBulbTaken){
+        isGreenBulbTaken = true;
+        lightOn.remove();
+        lightBulbGreen = document.createElement('img');
+        lightBulbGreen.src = "../media/lightBulbGreen.png";
+        lightBulbGreen.alt = "light bulb is green";
+        main.appendChild(lightBulbGreen);
+        imgOnScreen = lightBulbGreen;
+    }
+    else if(count>=1400&& !isBlueBulbTaken){
+        isBlueBulbTaken = true;
+        lightBulbGreen.remove();
+        lightBulbBlue = document.createElement('img');
+        lightBulbBlue.src = "../media/lightBulbBlue.png";
+        lightBulbBlue.alt = "light bulb is blue";
+        main.appendChild(lightBulbBlue);
+        imgOnScreen = lightBulbBlue;
+    }
+}
 
 async function checkUpgrades(){
     if (count == 500 && !is500Collected){
@@ -195,11 +251,14 @@ async function checkUpgrades(){
         randIntTriggered = true;
         startChallenge(); 
     }
-    else if (count >= explodeTime){
+    else if (count >= explodeTime && !isChallengeCompleted){
+        isChallengeCompleted = true;
         removeEventListener('wheel', onDigitalScroll)
         lightBulbExplodes();
     }
 }
+
+
 
 function upgrade500(){
     newBttn500 = document.createElement("button");
@@ -237,7 +296,8 @@ async function startChallenge(){
         timerCount--;
         await sleep(1000);
     }
-
+    switchOff.removeEventListener();
+    switchOn.removeEventListener();
     announcement.innerHTML ='';
     challengeCount.remove();
     newBttn = document.createElement('button');
@@ -347,3 +407,80 @@ function lightBulbExplodes(){
 
 }
 
+
+
+
+
+
+
+
+
+// 1. Iegūstam pašreizējo lietotāju no localStorage
+const currentUser = localStorage.getItem('clickerUsername');
+
+// Funkcija datu nosūtīšanai uz PHP
+async function saveProgress() {
+    if (!currentUser) return;
+
+    const data = {
+        username: currentUser,
+        count: count,
+        step: step,
+        autoClickStep: autoClickStep,
+        is500Collected: is500Collected ? 1 : 0
+    };
+
+    try {
+        const response = await fetch('../php/save.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            throw new Error(`Servera kļūda: ${response.status}`);
+        }
+
+        const result = await response.json();
+        if (result.success) {
+            console.log("Progress saglabāts lietotājam: " + currentUser);
+        }
+    } catch (error) {
+        console.error("Kļūda saglabājot progresu:", error);
+    }
+}
+
+// Funkcija datu saņemšanai no PHP
+async function loadProgress() {
+    if (!currentUser) return;
+
+    try {
+        const response = await fetch(`../php/load.php?username=${encodeURIComponent(currentUser)}`);
+        
+        if (!response.ok) {
+            throw new Error(`Servera kļūda: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (result.success && result.data) {
+            count = parseInt(result.data.count);
+            step = parseInt(result.data.step);
+            autoClickStep = parseInt(result.data.auto_click_step);
+            is500Collected = result.data.is_500_collected == 1;
+
+            count_label.innerHTML = count;
+            console.log("Progress ielādēts lietotājam: " + currentUser);
+        }
+    } catch (error) {
+        console.error("Kļūda ielādējot progresu:", error);
+    }
+}
+
+// 2. Ielādējam datus uzreiz, kad lapa tiek atvērta
+loadProgress();
+
+// 3. Automātiski saglabājam progresu ik pēc 10 sekundēm
+setInterval(() => {
+    saveProgress();
+}, 10000);

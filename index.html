@@ -1,19 +1,35 @@
 <!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sākums - Light Bulb Clicker</title>
+</head>
+<body>
 
-<html>
-    <head>
-        <link rel="stylesheet" href="styles/index-style.css">
-        <meta charset="UTF-8">
-    </head>
-    <body>
-        <h1>Cookie clicker</h1>
-        <main class="panel">
-            <input method="GET" action=""type="text" placeholder="Ievadi lietotājvārdu">
-            <button>
-                <a href="pages/main.html">Spēlēt</a>
-            </button>       
-        </main>
+    <!-- LIETOTĀJA IEVADES FORMA -->
+    <div id="login-screen">
+        <h2>Ievadi savu vārdu, lai spēlētu:</h2>
+        <input type="text" id="usernameInput" placeholder="Tavs lietotājvārds" maxlength="50">
+        <button id="startGameBtn">Sākt spēli</button>
+    </div>
 
-        </body>
-    
+    <script>
+        const usernameInput = document.getElementById('usernameInput');
+        const startGameBtn = document.getElementById('startGameBtn');
+
+        startGameBtn.addEventListener('click', () => {
+            const username = usernameInput.value.trim();
+            if (username !== "") {
+                // Saglabājam vārdu pārlūka atmiņā (localStorage)
+                localStorage.setItem('clickerUsername', username);
+                
+                // Pāradresējam uz spēles galveno lapu
+                window.location.href = 'pages/main.html';
+            } else {
+                alert("Lūdzu, ievadi lietotājvārdu!");
+            }
+        });
+    </script>
+</body>
 </html>
